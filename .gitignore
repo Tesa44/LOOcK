@@ -1,0 +1,4 @@
+# created by virtualenv automatically
+.venv/
+face_database.pkl
+face_images/
