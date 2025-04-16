@@ -5,6 +5,9 @@ from numpy.linalg import norm
 from models import detector, resnet
 from db import database
 from config import SIMILARITY_THRESHOLD
+from services import unlockLock
+
+canFetch = True
 
 def preprocess_image(face):
     transform = transforms.Compose([
@@ -32,6 +35,8 @@ def cosine_similarity(a, b):
     return np.dot(a, b) / (norm(a) * norm(b))
 
 def recognize_face(embedding):
+    global canFetch
+
     if embedding is None:
         return "No face detected"
     best_match = None
@@ -45,6 +50,13 @@ def recognize_face(embedding):
                 best_match = name
     if best_similarity > SIMILARITY_THRESHOLD:
         print(f"Recognized {best_match} with similarity: {best_similarity:.4f}")
+        if(canFetch):
+            isUnlocked = unlockLock()
+            if(isUnlocked): print("Lock successfully unlocked! It can be done only once during the lifecycle of an application")
+            else: print("Cannot unlock the lock due to api connection! Please restart an app and try again later")
+
+            canFetch = False
+
         return f"Recognized: {best_match}"
     print(f"Unknown person. Best match: {best_match}, similarity: {best_similarity:.4f}")
     return "Unknown person"
