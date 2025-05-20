@@ -7,7 +7,7 @@ from db import database
 from config import SIMILARITY_THRESHOLD
 from services import unlockLock
 
-canFetch = True
+canFetch = False
 
 def preprocess_image(face):
     transform = transforms.Compose([

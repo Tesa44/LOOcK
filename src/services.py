@@ -59,8 +59,8 @@ def lockLock():
 
     response = requests.post(url, json=body)
 
-start = input()
-if start == "start":
-    unlockLock()
+# start = input()
+# if start == "start":
+#     unlockLock()
 
 
