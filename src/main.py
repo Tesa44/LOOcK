@@ -3,6 +3,13 @@ import db
 from face_processing import get_embedding, recognize_face
 
 # Real-time face recognition
+font                   = cv2.FONT_HERSHEY_SIMPLEX
+bottomLeftCornerOfText = (10,30)
+fontScale              = 1
+fontColor              = (0,255,0)
+thickness              = 1
+lineType               = 2
+
 cap = cv2.VideoCapture(0)
 while True:
     ret, frame = cap.read()
@@ -10,8 +17,42 @@ while True:
         break
 
     embedding, face_image, box = get_embedding(frame)
-    result = recognize_face(embedding)
+    result, similarity = recognize_face(embedding)
     print(result)
+
+    cv2.rectangle(frame, (0, 0), (370, 50), (0, 0, 0), -1)
+
+    cv2.putText(frame, f'{similarity}',
+                bottomLeftCornerOfText,
+                font,
+                fontScale,
+                fontColor,
+                thickness,
+                lineType)
+
+    cv2.putText(frame, "[a] to add reference",
+                (10, 350),
+                font,
+                fontScale,
+                fontColor,
+                thickness + 1,
+                lineType)
+
+    cv2.putText(frame, "[u] to unlock lock",
+                (10, 400),
+                font,
+                fontScale,
+                fontColor,
+                thickness + 1,
+                lineType)
+
+    cv2.putText(frame, "[q] to quit",
+                (10, 450),
+                font,
+                fontScale,
+                fontColor,
+                thickness + 1,
+                lineType)
 
     if box:
         x1, y1, x2, y2 = box
