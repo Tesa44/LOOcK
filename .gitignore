@@ -2,3 +2,4 @@
 .venv/
 face_database.pkl
 face_images/
+test/

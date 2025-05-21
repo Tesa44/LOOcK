@@ -34,7 +34,7 @@ def get_embedding(frame):
 def cosine_similarity(a, b):
     return np.dot(a, b) / (norm(a) * norm(b))
 
-def recognize_face(embedding):
+def recognize_face(embedding, display=True):
     global canFetch
 
     if embedding is None:
@@ -44,12 +44,12 @@ def recognize_face(embedding):
     for name, stored_embeddings in database.items():
         for stored_embedding in stored_embeddings:
             similarity = cosine_similarity(stored_embedding, embedding)
-            print(f"Tried {name}, similarity: {similarity:.4f}")
+            print(f"Tried {name}, similarity: {similarity:.4f}") if display else None
             if similarity > best_similarity:
                 best_similarity = similarity
                 best_match = name
     if best_similarity > SIMILARITY_THRESHOLD:
-        print(f"Recognized {best_match} with similarity: {best_similarity:.4f}")
+        print(f"Recognized {best_match} with similarity: {best_similarity:.4f}") if display else None
         if(canFetch):
             isUnlocked = unlockLock()
             if(isUnlocked): print("Lock successfully unlocked! It can be done only once during the lifecycle of an application")

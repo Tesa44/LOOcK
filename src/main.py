@@ -1,16 +1,21 @@
+import time
+
 import cv2
 import db
 from face_processing import get_embedding, recognize_face
 import os
 
 test = True
-IMAGE_DIR = '../test/images'
-RESULT_PATH ='../test/results.txt'
+sunglasses = True
+name = "oleksy"
+IMAGE_DIR = f'../test/{name}/images'
+RESULT_PATH = f'../test/{name}/results.txt'
 NUM_TESTS = 100
 file = open(RESULT_PATH, "w")
 i=1
-name = "Kamil"
 freq = 5
+wait_for = 5.0 # seconds
+start_time = time.time()
 # Real-time face recognition
 cap = cv2.VideoCapture(0)
 while True:
@@ -23,19 +28,20 @@ while True:
 
     embedding, face_image, box = get_embedding(frame)
     result, similarity = recognize_face(embedding)
-    print(result)
+    # print(result)
 
     if box:
         x1, y1, x2, y2 = box
         cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
 
-
-    if test and i % freq == 0:
-        image_path = os.path.join(IMAGE_DIR, f"{name}-{i // freq}.jpg")
-        cv2.imwrite(image_path, frame)
-        line = str(similarity).replace(".",',') + "\n"
-        file.write(line)
-    i+=1
+    if (time.time() - start_time > wait_for):
+        if test and i % freq == 0:
+            image_path = os.path.join(IMAGE_DIR, f"{name}-{i // freq}{"_sunglasses" if sunglasses else ""}.jpg")
+            cv2.imwrite(image_path, frame)
+            line = str(similarity).replace(".",',') + "\n"
+            file.write(line)
+            print("writing")
+        i+=1
 
     cv2.imshow('Face Recognition', frame)
     key = cv2.waitKey(1) & 0xFF

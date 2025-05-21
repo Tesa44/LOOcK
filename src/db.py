@@ -30,4 +30,26 @@ def add_face_to_database(name, embedding, face_image):
     else:
         print("No valid face detected to add.")
 
+import os
+import glob
+
+def remove_person_from_database(name):
+    if name in database:
+        # Usuń osobę z bazy danych
+        del database[name]
+        save_database(database)
+        print(f"{name} został usunięty z bazy danych.")
+
+        # Usuń wszystkie obrazy tej osoby
+        image_pattern = os.path.join(IMAGE_DIR, f"{name}_*.jpg")
+        images = glob.glob(image_pattern)
+        for img_path in images:
+            try:
+                os.remove(img_path)
+                print(f"Usunięto obraz: {img_path}")
+            except OSError as e:
+                print(f"Błąd podczas usuwania {img_path}: {e}")
+    else:
+        print(f"{name} nie znajduje się w bazie danych.")
+
 database = load_database()
