@@ -34,7 +34,7 @@ def get_embedding(frame):
 def cosine_similarity(a, b):
     return np.dot(a, b) / (norm(a) * norm(b))
 
-def recognize_face(embedding, display=True):
+def recognize_face(embedding, test=False):
     global canFetch
 
     if embedding is None:
@@ -44,19 +44,19 @@ def recognize_face(embedding, display=True):
     for name, stored_embeddings in database.items():
         for stored_embedding in stored_embeddings:
             similarity = cosine_similarity(stored_embedding, embedding)
-            print(f"Tried {name}, similarity: {similarity:.4f}") if display else None
+            print(f"Tried {name}, similarity: {similarity:.4f}") if not test else None
             if similarity > best_similarity:
                 best_similarity = similarity
                 best_match = name
     if best_similarity > SIMILARITY_THRESHOLD:
-        print(f"Recognized {best_match} with similarity: {best_similarity:.4f}") if display else None
-        if(canFetch):
+        print(f"Recognized {best_match} with similarity: {best_similarity:.4f}") if not test else None
+        if canFetch and not test:
             isUnlocked = unlockLock()
-            if(isUnlocked): print("Lock successfully unlocked! It can be done only once during the lifecycle of an application")
+            if isUnlocked: print("Lock successfully unlocked! It can be done only once during the lifecycle of an application")
             else: print("Cannot unlock the lock due to api connection! Please restart an app and try again later")
 
             canFetch = False
 
         return f"Recognized: {best_match}", best_similarity
-    print(f"Unknown person. Best match: {best_match}, similarity: {best_similarity:.4f}")
+    print(f"Unknown person. Best match: {best_match}, similarity: {best_similarity:.4f}") if not test else None
     return "Unknown person", best_similarity

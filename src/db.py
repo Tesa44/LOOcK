@@ -52,4 +52,14 @@ def remove_person_from_database(name):
     else:
         print(f"{name} nie znajduje się w bazie danych.")
 
+def display_database_contents():
+    if not database:
+        print("Baza danych jest pusta.")
+        return
+
+    print("Zawartość bazy danych:")
+    for name, embeddings in database.items():
+        print(f"- {name}: {len(embeddings)} zapisanych twarzy")
+
+
 database = load_database()

@@ -6,7 +6,7 @@ import os
 from pathlib import Path
 
 FREQ = 5  # Frequency of taking frames from camera
-WAIT_FOR = 5.0  # seconds
+WAIT_FOR = 10.0  # seconds
 
 def add_test_img(name, sunglasses, num_tests=100):
     folder_path = Path(f'../test/{name}/images')
