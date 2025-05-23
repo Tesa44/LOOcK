@@ -11,8 +11,17 @@ def unlockLock():
        "src":"tesa",
        "method":"Switch.Set",
        "params": {
-         "id":1,
-         "on": "true"
+         "id":0,
+         "on": True
+       }
+    }
+
+    request = {
+       "id": 0,
+       "src":"tesa",
+       "method":"Switch.GetConfig",
+       "params": {
+         "id":0,
        }
     }
 
@@ -23,10 +32,14 @@ def unlockLock():
 
     response = requests.post(url, json = body)
 
-    if(response):
+    # response_config = requests.post(url, json = request)
+    print(response.json())
+    # print(response_config)
+
+    if(response.json()):
         #send post to turn off, or maybe its even unnecessary, because it does it automatically (I mean lock)
         #or maybe be have to send lock immidiately bcs our lock cannot stand longer ON status?
-        r = Timer(10.0, lockLock)
+        r = Timer(3.0, lockLock)
         r.start()
 
         return True
@@ -39,9 +52,15 @@ def lockLock():
         "src": "xmavv",
         "method": "Switch.Set",
         "params": {
-            "id": 1,
-            "on": "false"
+            "id": 0,
+            "on": False
         }
     }
 
     response = requests.post(url, json=body)
+
+# start = input()
+# if start == "start":
+#     unlockLock()
+
+

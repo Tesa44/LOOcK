@@ -7,7 +7,7 @@ from db import database
 from config import SIMILARITY_THRESHOLD
 from services import unlockLock
 
-canFetch = True
+canFetch = False
 
 def preprocess_image(face):
     transform = transforms.Compose([
@@ -38,7 +38,7 @@ def recognize_face(embedding):
     global canFetch
 
     if embedding is None:
-        return "No face detected"
+        return "", 0
     best_match = None
     best_similarity = -1
     for name, stored_embeddings in database.items():
@@ -57,6 +57,6 @@ def recognize_face(embedding):
 
             canFetch = False
 
-        return f"Recognized: {best_match}"
+        return best_match, best_similarity
     print(f"Unknown person. Best match: {best_match}, similarity: {best_similarity:.4f}")
-    return "Unknown person"
+    return "unknown", best_similarity
